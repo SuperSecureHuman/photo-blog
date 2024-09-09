@@ -16,7 +16,7 @@ const AWS_S3_SECRET_ACCESS_KEY = process.env.AWS_S3_SECRET_ACCESS_KEY ?? '';
 //   ? `https://${AWS_S3_BUCKET}.s3.${AWS_S3_REGION}.amazonaws.com`
 //   : undefined;
 
-export const AWS_S3_BASE_URL = "http://" + process.env.S3_BASE_URL ?? '';
+export const AWS_S3_BASE_URL = 'http://' + process.env.S3_BASE_URL ?? '';
 
 export const awsS3Client = () => new S3Client({
   region: AWS_S3_REGION,
@@ -30,7 +30,8 @@ export const awsS3Client = () => new S3Client({
 
 
 // #Ark-modified Image URL Logic
-const urlForKey = (key?: string) => `${AWS_S3_BASE_URL}/${AWS_S3_BUCKET}/${key}`;
+const urlForKey = (key?: string) =>
+  `${AWS_S3_BASE_URL}/${AWS_S3_BUCKET}/${key}`;
 
 export const isUrlFromAwsS3 = (url?: string) =>
   AWS_S3_BASE_URL && url?.startsWith(AWS_S3_BASE_URL);

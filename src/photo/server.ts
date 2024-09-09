@@ -44,7 +44,12 @@ export const extractImageDataFromBlobPath = async (
 
   // #Ark-modified temporary 500 error fix
   const fileBytes: ArrayBuffer | undefined = blobPath
-    ? await fetch(url, { cache: 'no-store' }).then(res => res.arrayBuffer()).catch((e) => { console.log(e); return undefined; })
+    ? await fetch(url, { cache: 'no-store' })
+      .then(res => res.arrayBuffer())
+      .catch((e) => {
+        console.log(e);
+        return undefined;
+      })
     : undefined;
 
   let exifData: ExifData | undefined;
