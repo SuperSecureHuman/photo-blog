@@ -9,18 +9,20 @@ const HOSTNAME_VERCEL_BLOB = VERCEL_BLOB_STORE_ID
 const HOSTNAME_CLOUDFLARE_R2 =
   process.env.NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_DOMAIN;
 
-const HOSTNAME_AWS_S3 =
-  process.env.NEXT_PUBLIC_AWS_S3_BUCKET &&
-  process.env.NEXT_PUBLIC_AWS_S3_REGION
-    // eslint-disable-next-line max-len
-    ? `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_AWS_S3_REGION}.amazonaws.com`
-    : undefined;
+// const HOSTNAME_AWS_S3 =
+//   process.env.NEXT_PUBLIC_AWS_S3_BUCKET &&
+//   process.env.NEXT_PUBLIC_AWS_S3_REGION
+//     // eslint-disable-next-line max-len
+//     ? `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_AWS_S3_REGION}.amazonaws.com`
+//     : undefined;
 
-const createRemotePattern = (hostname) => hostname
+const HOSTNAME_AWS_S3 = "localhost";
+
+const createRemotePattern = (hostname, port) => hostname
   ? {
-    protocol: 'https',
+    protocol: 'http',
     hostname,
-    port: '',
+    port: port || '',
     pathname: '/**',
   }
   : [];
@@ -32,7 +34,7 @@ const nextConfig = {
     remotePatterns: []
       .concat(createRemotePattern(HOSTNAME_VERCEL_BLOB))
       .concat(createRemotePattern(HOSTNAME_CLOUDFLARE_R2))
-      .concat(createRemotePattern(HOSTNAME_AWS_S3)),
+      .concat(createRemotePattern(HOSTNAME_AWS_S3, '9000')),
     minimumCacheTTL: 31536000,
   },
 };

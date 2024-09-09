@@ -42,8 +42,9 @@ export const extractImageDataFromBlobPath = async (
 
   const extension = getExtensionFromStorageUrl(url);
 
-  const fileBytes = blobPath
-    ? await fetch(url, { cache: 'no-store' }).then(res => res.arrayBuffer())
+  // #Ark-modified temporary 500 error fix
+  const fileBytes: ArrayBuffer | undefined = blobPath
+    ? await fetch(url, { cache: 'no-store' }).then(res => res.arrayBuffer()).catch((e) => { console.log(e); return undefined; })
     : undefined;
 
   let exifData: ExifData | undefined;
@@ -108,26 +109,26 @@ export const extractImageDataFromBlobPath = async (
 const generateBase64 = async (
   image: ArrayBuffer,
   middleware: (sharp: Sharp) => Sharp,
-) => 
+) =>
   middleware(sharp(image))
     .withMetadata()
     .toFormat('jpeg', { quality: 90 })
     .toBuffer()
     .then(data => `data:image/jpeg;base64,${data.toString('base64')}`);
 
-const resizeImage = async (image: ArrayBuffer) => 
+const resizeImage = async (image: ArrayBuffer) =>
   generateBase64(image, sharp => sharp
     .resize(IMAGE_WIDTH_RESIZE)
   );
 
-const blurImage = async (image: ArrayBuffer) => 
+const blurImage = async (image: ArrayBuffer) =>
   generateBase64(image, sharp => sharp
     .resize(IMAGE_WIDTH_BLUR)
     .modulate({ saturation: 1.15 })
     .blur(4)
   );
 
-export const resizeImageFromUrl = async (url: string) => 
+export const resizeImageFromUrl = async (url: string) =>
   fetch(decodeURIComponent(url))
     .then(res => res.arrayBuffer())
     .then(buffer => resizeImage(buffer))
@@ -136,7 +137,7 @@ export const resizeImageFromUrl = async (url: string) =>
       return '';
     });
 
-export const blurImageFromUrl = async (url: string) => 
+export const blurImageFromUrl = async (url: string) =>
   fetch(decodeURIComponent(url))
     .then(res => res.arrayBuffer())
     .then(buffer => blurImage(buffer))
