@@ -16,7 +16,7 @@ const HOSTNAME_CLOUDFLARE_R2 =
 //     ? `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_AWS_S3_REGION}.amazonaws.com`
 //     : undefined;
 
-const HOSTNAME_AWS_S3 = "192.168.0.104";
+const HOSTNAME_AWS_S3 = process.env.S3_BASE_URL;
 
 const createRemotePattern = (hostname, port) => hostname
   ? {
@@ -34,7 +34,7 @@ const nextConfig = {
     remotePatterns: []
       .concat(createRemotePattern(HOSTNAME_VERCEL_BLOB))
       .concat(createRemotePattern(HOSTNAME_CLOUDFLARE_R2))
-      .concat(createRemotePattern(HOSTNAME_AWS_S3, '19000')),
+      .concat(createRemotePattern(HOSTNAME_AWS_S3)),
     minimumCacheTTL: 31536000,
   },
 };
